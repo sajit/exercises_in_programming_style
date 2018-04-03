@@ -1,6 +1,7 @@
 package good.old.times;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -15,20 +16,46 @@ import java.io.IOException;
 public class TermFrequency {
 
     public static String[] STOP_WORDS = new String[] {"of","the","is","in","a","an"};//stop words , [of,the,is,in,a,an]
-    static String[][] data = new String[8][];
 
     public static void main(String[] args) throws IOException {
-        data[0]= STOP_WORDS;
         String filePath = args[0];
         System.out.println(filePath);
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         int ch = br.read();
+        String currentWord = "";
         while(ch != -1) {
-            System.out.println((char)ch);
+            if(Character.isAlphabetic(ch)) {
+                currentWord =  currentWord + (char)ch;
+            }
+            else {
+                //end of word
+
+                System.out.println(currentWord);
+                if(!checkIfStopWord(currentWord)) {
+                   determineTermFrequency(currentWord);
+                }
+                currentWord = "";
+
+            }
             ch = br.read();
         }
         br.close();
 
 
     }
+
+    private static void determineTermFrequency(String word) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("termfrequency.txt"));
+
+    }
+
+    private static boolean checkIfStopWord(String currentWord) {
+        for(int i=0;i<STOP_WORDS.length;i++) {
+            if(STOP_WORDS[i]==currentWord) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
